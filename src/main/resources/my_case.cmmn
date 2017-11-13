@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cmmn:definitions xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:cmmn="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/cmmn" id="Test" targetNamespace="http://bpmn.io/schema/cmmn" exporter="Camunda Modeler" exporterVersion="1.8.2">
+  <cmmn:caseFileItemDefinition id="CaseFileItemDefinition_01munud" name="allKonditionenInaktiv" />
+  <cmmn:caseFileItemDefinition id="CaseFileItemDefinition_0fmegh3" />
+  <cmmn:case id="my_case" name="my_case_case">
+    <cmmn:casePlanModel id="CasePlanModel_1" name="My case" autoComplete="true">
+      <cmmn:planItem id="process_task_do_something" name="Do something" definitionRef="ProcessTask_16ri03m">
+        <cmmn:itemControl id="PlanItemControl_13ppin6">
+          <cmmn:repetitionRule id="RepetitionRule_19alrgb" camunda:repeatOnStandardEvent="manualStart">
+            <cmmn:condition id="Expression_06l30ov">${true}</cmmn:condition>
+          </cmmn:repetitionRule>
+          <cmmn:manualActivationRule id="ManualActivationRule_1cffk4i">
+            <cmmn:condition id="Expression_0jzjhtg">${true}</cmmn:condition>
+          </cmmn:manualActivationRule>
+        </cmmn:itemControl>
+      </cmmn:planItem>
+      <cmmn:planItem id="milestone_everything_done" name="Everything is done" definitionRef="Milestone_12r9zag">
+        <cmmn:itemControl id="PlanItemControl_0oq3mii">
+          <cmmn:requiredRule id="RequiredRule_0s73vcd">
+            <cmmn:condition id="Expression_0c1fv4j">${true}</cmmn:condition>
+          </cmmn:requiredRule>
+        </cmmn:itemControl>
+        <cmmn:entryCriterion id="EntryCriterion_1eemz1o" sentryRef="Sentry_081x9hc" />
+      </cmmn:planItem>
+      <cmmn:sentry id="Sentry_081x9hc">
+        <cmmn:planItemOnPart id="PlanItemOnPart_0c4to9i" sourceRef="process_task_do_something">        <cmmn:standardEvent>complete</cmmn:standardEvent>
+</cmmn:planItemOnPart>
+        <cmmn:ifPart id="IfPart_14xyp16">
+          <cmmn:condition id="Expression_0a1bfr9">${everythingDoneSentry.isEverythingDone(caseExecution)}</cmmn:condition>
+        </cmmn:ifPart>
+      </cmmn:sentry>
+      <cmmn:processTask id="ProcessTask_16ri03m" processRef="do_something">
+        <cmmn:extensionElements>
+          <camunda:in businessKey="#{caseExecution.caseBusinessKey}" />
+          <camunda:caseExecutionListener event="complete" delegateExpression="${doSomethingCompleteListener}" />
+        </cmmn:extensionElements>
+      </cmmn:processTask>
+      <cmmn:milestone id="Milestone_12r9zag" name="Everything done">
+        <cmmn:extensionElements>
+          <camunda:caseExecutionListener event="occur" delegateExpression="${everythingDoneListener}" />
+        </cmmn:extensionElements>
+      </cmmn:milestone>
+    </cmmn:casePlanModel>
+  </cmmn:case>
+  <cmmn:association id="Association_0p4nzfu" sourceRef="EntryCriterion_1eemz1o" targetRef="TextAnnotation_09flmkl" />
+  <cmmn:textAnnotation id="TextAnnotation_09flmkl">  <cmmn:text>When everything is done</cmmn:text>
+</cmmn:textAnnotation>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="_5a66685b-5f57-4e2f-b1d1-acca4fae04b2">
+      <cmmndi:Size xsi:type="dc:Dimension" width="500" height="500" />
+      <cmmndi:CMMNShape id="DI_CasePlanModel_1" cmmnElementRef="CasePlanModel_1">
+        <dc:Bounds x="238" y="90" width="460" height="246" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="PlanItem_04sy9sg_di" cmmnElementRef="process_task_do_something">
+        <dc:Bounds x="275" y="170" width="100" height="80" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="TextAnnotation_09flmkl_di" cmmnElementRef="TextAnnotation_09flmkl">
+        <dc:Bounds x="520" y="110" width="124" height="50" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNEdge id="Association_0p4nzfu_di" cmmnElementRef="Association_0p4nzfu">
+        <di:waypoint xsi:type="dc:Point" x="497" y="196" />
+        <di:waypoint xsi:type="dc:Point" x="520" y="196" />
+        <di:waypoint xsi:type="dc:Point" x="520" y="160" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNEdge>
+      <cmmndi:CMMNShape id="PlanItem_08lclkq_di" cmmnElementRef="milestone_everything_done">
+        <dc:Bounds x="487" y="190" width="100" height="40" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="EntryCriterion_1eemz1o_di" cmmnElementRef="EntryCriterion_1eemz1o">
+        <dc:Bounds x="477" y="196" width="20" height="28" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNEdge id="PlanItemOnPart_0c4to9i_di" cmmnElementRef="PlanItemOnPart_0c4to9i" targetCMMNElementRef="EntryCriterion_1eemz1o" isStandardEventVisible="true">
+        <di:waypoint xsi:type="dc:Point" x="375" y="210" />
+        <di:waypoint xsi:type="dc:Point" x="435" y="210" />
+        <di:waypoint xsi:type="dc:Point" x="435" y="210" />
+        <di:waypoint xsi:type="dc:Point" x="477" y="210" />
+        <cmmndi:CMMNLabel>
+          <dc:Bounds x="399" y="191" width="51" height="13" />
+        </cmmndi:CMMNLabel>
+      </cmmndi:CMMNEdge>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</cmmn:definitions>
